@@ -1,0 +1,100 @@
+modules:
+  jira:projectSettingsPage:
+    - key: component-operating-hello-world
+      function: main
+      title: Component Operating
+
+  jira:globalPermission:
+    - key: "forge-global-permission"
+      name: "Forge global permission"
+      description: "Forge custom global permission"
+      anonymousAllowed: false
+      defaultGrants:
+        - "jira-administrators"
+
+  # jira:customField:
+  # - key: issue-progress
+  #   name: Issue progress
+  #   description: The progress of the issue, on a scale from 0 to 100.
+  #   type: number
+  #   validation:
+  #     expression: value == null || (value >= 0 && value <= 100)
+  #     errorMessage: The value must be a number between 0 and 100.
+  #   readOnly: false
+  #   function: renderIssueProgress
+  #   edit:
+  #     function: editIssueProgress
+
+  jira:customField:
+  - key: issue-progress
+    name: Issue progress
+    description: The progress of the issue, on a scale from 0 to 100.
+    type: number
+    validation:
+      expression: value == null || (value >= 0 && value <= 100)
+      errorMessage: The value must be a number between 0 and 100.
+    formatter:
+      expression: "`${'▰'.repeat(value / 10).padEnd(10, '▱')} (${value}%)`"
+      export: true
+    parser:
+      expression: "Number(value.replace('[^\\d]', ''))"
+    searchSuggestions:
+      expression: '["0", "25", "50", "75", 100"]'
+    readOnly: false 
+    function: renderIssueProgress
+    edit:
+      function: editIssueProgress
+   
+
+
+  jira:issuePanel:
+    - key: hello-world-hello-world-panel
+      function: admin
+      title: "Chaitanya's App"
+      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+    
+  
+  # jira:adminPage:
+  #   - key: admin-page-example-hello-world-admin-page
+  #     function: main-admin-page
+  #     title: Admin page example
+  #   - key: admin-page-example-hello-world-configure-page
+  #     function: main-configure-page
+  #     title: Configure page example
+  #     useAsConfig: true
+  #   - key: admin-page-example-hello-world-get-started-page
+  #     function: main-get-started-page
+  #     title: Get started page example
+  #     useAsGetStarted: true
+ 
+
+
+  jira:projectPermission:
+    - key: "forge-project-permission"
+      name: Forge project permission
+      description: "Forge custom project permission"
+      category: 'attachments'
+
+  function:
+    - key: main
+      handler: index.run
+    - key: admin  
+      handler: admin.run
+    - key: editIssueProgress
+      handler: customfield.run
+    - key: renderIssueProgress
+      handler: customfield.run  
+    # - key: main-admin-page
+    #   handler: uipage.run    
+    # - key: main-configure-page
+    #   handler: uipage.run
+    # - key: main-get-started-page
+    #   handler: uipage.run
+
+app:
+  id: ari:cloud:ecosystem::app/25652ec5-fee0-4003-9436-49ac04a60dea
+permissions:
+  scopes:
+    - 'write:field:jira' 
+  
+    
